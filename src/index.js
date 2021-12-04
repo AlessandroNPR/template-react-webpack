@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import './assets/css/style.css'
-ReactDOM.render(<h1>Ciao</h1>, document.getElementById('root'));
+import App from './App'
+ReactDOM.render(<App/>, document.getElementById('root'));
 
 serviceWorker.unregister();
 

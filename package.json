@@ -39,6 +39,8 @@
     "copy-webpack-plugin": "^10.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-pro-sidebar": "^0.7.1",
+    "react-resize-detector": "^6.7.6",
     "react-router-dom": "^6.0.2",
     "react-script": "^2.0.5",
     "reactstrap": "^9.0.1"

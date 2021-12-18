@@ -13,27 +13,65 @@ import {
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import Sidebar from "./Components/Sidebar";
 import Footer from "./Components/Footer"
+import './assets/css/sidebar.css'
+import ResizeDetector from "react-resize-detector";
 const App = () => {
-    const [isOpen, setIsOpen] = useState(true)
-
+    function getWidth() {
+        return Math.max(
+            document.body.scrollWidth,
+            document.documentElement.scrollWidth,
+            document.body.offsetWidth,
+            document.documentElement.offsetWidth,
+            document.documentElement.clientWidth
+        );
+    }
+    const [isOpen, setIsOpen] = useState(false)
+    const [width, setWidth] = useState(getWidth())
     const onChangeMenu = () => {
         setIsOpen(!isOpen)
     }
+    const getClass = () => {
+        if (width > 700) {
+            return isOpen ?  "page moveToRightPage" :  "page moveToLeftPage"
+        } else {
+            return "content-page page"
+        }
+    }
 
+    const getClassContainer = () => {
+        if (width > 700) {
+            return ""
+        } else {
+            return "main-wrap"
+        }
+    }
+
+    const getClassSidebar = () => {
+        if (width <= 700) {
+            return isOpen ? "relative-sidebar moveToRight " : "relative-sidebar moveToLeft "
+        } else return ""
+    }
+
+    const onResize = (width) => setWidth(width);
     return  <Router>
-        <Header onChangeMenu={onChangeMenu} isOpen={isOpen}/>
-        <div className="main-wrap">
-                <Sidebar isOpen={isOpen}/>
-                <div className="page" style={{ overflowY: 'auto', marginTop: '60px', left: isOpen ? '250px' : '0'}}>
-                    <div style={{padding: '2rem'}}>
+        <ResizeDetector handleWidth onResize={onResize} />
+        <Header onChangeMenu={onChangeMenu} width={width} isOpen={isOpen}/>
+        <div >
+            {width > 700 && <Sidebar width={width} isOpen={isOpen}/>}
+                <div style={{ overflowY: 'auto', marginTop: '60px', boxShadow: width > 700 ? '10px 0 5px -2px rgb(57 63 72 / 10%) inset' : 0}} className={getClass()}>
+
+                    <div style={{minHeight: '60.6vh',padding: '2rem'}}>
                         <Routes>
-                            <Route exact path="/" element={<Home/>}/>
+                            <Route exact path="/" element={<Home width={width}/>}/>
                             <Route path="/about" element={<h1>about</h1>}/>
                             <Route path="/dashboard" element={<h1>dashboard</h1>}/>
                         </Routes>
                     </div>
-                    <Footer/>
+                    <Footer isOpen={isOpen} width={width}/>
                 </div>
+            {width <= 700 && <div className={getClassSidebar()}>
+                <Sidebar width={width} isOpen={isOpen}/>
+            </div>}
             </div>
         
     </Router>
